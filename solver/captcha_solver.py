@@ -10,7 +10,6 @@ from .detector import CaptchaDetector
 
 
 class CaptchaSolver:
-    _count: int = 0
     _captcha_element_idx: int = -1
 
     def __init__(

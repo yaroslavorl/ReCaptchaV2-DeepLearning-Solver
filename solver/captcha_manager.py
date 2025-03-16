@@ -60,6 +60,10 @@ class CaptchaManager:
         time.sleep(self._times_sleep.SKIP_CAPTCHA)
 
     def captcha_completed(self):
-        self.switch_to_iframe(by=By.TAG_NAME, value=self._captcha_elements.IFRAME)
-        self.__driver.find_element(By.ID, self._captcha_elements.VERIFY_BUTTON).click()
+        try:
+            self.switch_to_iframe(by=By.TAG_NAME, value=self._captcha_elements.IFRAME)
+            self.__driver.find_element(By.ID, self._captcha_elements.VERIFY_BUTTON).click()
+        except (NoSuchElementException, Exception):
+            self.__driver.switch_to.default_content()
+            self.click_im_not_robot()
         time.sleep(self._times_sleep.CAPTCHA_COMPLETED)

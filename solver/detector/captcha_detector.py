@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 
-from .detector_settings import CaptchaCell, CAPTCHA_CELL, OBJECT_NOT_FOUND, CELL_NOT_FOUND
+from .detector_settings import CaptchaCell, CAPTCHA_CELL, OBJECT_NOT_FOUND, CELL_NOT_FOUND, CaptchaTiles
 
 
 class CaptchaDetector:
@@ -34,6 +34,10 @@ class CaptchaDetector:
             detect_confidence: float = 0.05,
             mask_cell_overlap_px: int = 5,
     ) -> list[tuple[float, float]] | None:
+
+        if captcha_type not in CaptchaTiles._value2member_map_:
+            return None
+
         img_captcha = self._decoding_bytes_to_img(captcha) if isinstance(captcha, bytes) else captcha
         captcha_size = img_captcha.shape
 
@@ -41,7 +45,7 @@ class CaptchaDetector:
         predict_result = self.__model.predict(processed_img, conf=detect_confidence)
 
         if predict_result[0].masks is None:
-            return
+            return None
         all_masks = predict_result[0].masks.data.cpu().numpy()
 
         all_classes = predict_result[0].boxes.cls.cpu().int().numpy()
@@ -49,7 +53,7 @@ class CaptchaDetector:
 
         if not required_masks.size:
             print(f'{self.__class__.__name__}: {OBJECT_NOT_FOUND}')
-            return
+            return None
 
         if not self._captcha_cell_dict[captcha_type].cell_coord:
             bbx_cell_coord = self.find_captcha_cell_contours(img_captcha,
@@ -59,7 +63,7 @@ class CaptchaDetector:
                                                              error_similar_area=error_similar_area)
             if not bbx_cell_coord:
                 print(f'{self.__class__.__name__}: {CELL_NOT_FOUND}')
-                return
+                return None
             self._captcha_cell_dict[captcha_type].cell_coord = bbx_cell_coord
         else:
             bbx_cell_coord = self._captcha_cell_dict[captcha_type].cell_coord

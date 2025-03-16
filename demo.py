@@ -3,7 +3,7 @@ import time
 
 from dotenv import load_dotenv
 
-from get_driver import get_driver
+from utils.get_driver import get_driver
 from solver import CaptchaSolver
 
 
