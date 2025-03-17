@@ -27,13 +27,14 @@ class TimeSleep(NamedTuple):
 
 CLICK_SCRIPT = 'document.elementFromPoint({x_center}, {y_center}).click();'
 
-CAPTCHA_CLASS_NAME = {'car': ['автомобиль', 'автомобили'],
-                      'bus': ['автобус', 'автобусы', 'автобусами'],
-                      'motorcycle': ["мотоцикл", 'мотоциклы'],
-                      'bicycle': ['велосипед', "велосипеды"],
-                      'fire hydrant': ['гидрант', 'гидрантами', 'пожарные гидранты', 'пожарный гидрант'],
-                      'traffic light': ["светофор", 'светофоры'],
-                      'boat': ['лодки', 'лодками']
+CAPTCHA_CLASS_NAME = {'car': ['автомобиль', 'автомобили', 'car', 'cars'],
+                      'bus': ['автобус', 'автобусы', 'автобусами', 'bus'],
+                      'motorcycle': ["мотоцикл", 'мотоциклы', 'motorcycle', 'motorcycles'],
+                      'bicycle': ['велосипед', 'велосипеды', 'bicycle', 'bicycles'],
+                      'fire hydrant': ['гидрант', 'гидрантами', 'пожарные гидранты', 'пожарный гидрант', 'fire hydrant',
+                                       'hydrant', 'hydrants', 'fire hydrants'],
+                      'traffic light': ["светофор", 'светофоры', 'traffic light', 'traffic lights'],
+                      'boat': ['лодки', 'лодками', 'boat', 'boats']
 
                       }
 

@@ -1,4 +1,4 @@
-# ReCaptcher 🚀🚀🚀
+# ReCaptcher ⚡⚡⚡
 
 ReCaptcher - Automatic Google reCAPTCHAv2 Solver using YOLO Model Segmentation
 
@@ -12,7 +12,7 @@ ReCaptcher использует Selenium для автоматизированн
 
 YOLO выполняет сегментацию и возвращает маски объектов,
 затем осуществляется анализ полученных масок для нахождения пересечений между ними и ячейками капчи.
-На основании полученных данных о пересечении, система принимает решение о том, на какие ячейки с объектами необходимо выбрать. 
+На основании полученных данных о пересечении, система принимает решение о том, какие ячейки с объектами необходимо выбрать. 
 
 Пример автоматического решения Google reCAPTCHA представлен ниже.
 
@@ -22,7 +22,7 @@ YOLO выполняет сегментацию и возвращает маск�
 
    ```bash
   git clone https://github.com/yaroslavorl/ReCaptcher.git
-  cd nomerogram-parser
+  cd ReCaptcher
   
   # Python >= 3.10
   python -m venv venv
@@ -99,14 +99,47 @@ solver = CaptchaSolver(driver=google_driver,
 if solver.is_captcha():
     solver.solve_captcha()
 ```
+### Solver Settings:
+```python 
+def solve_captcha(
+        self,
+        *,
+        click_im_not_robot: bool = True,
+        is_img_blur: bool = True,
+        ksize_blur: tuple[int, int] = (11, 11),
+        sigma_blur: float = 1,
+        binary_cell_thresh: float = 254,
+        area_cell_thresh: float = 5e3,
+        error_similar_area: float = 250,
+        detect_confidence: float = 0.05,
+        mask_cell_overlap_px: int = 5
+) -> bool:
+  """
+   Method for automatically solving captcha.
+
+   Args:
+      click_im_not_robot (bool): If True, simulates a click on the "I'm not a robot" button.
+      is_img_blur (bool): If True, applies blur to the captcha image.
+      ksize_blur (tuple[int, int]): Size of the blur kernel.
+      sigma_blur (float): The sigma value for the Gaussian blur.
+      binary_cell_thresh (float): Threshold value for captcha cell binarization.
+      area_cell_thresh (float): Threshold area for defining captcha cells.
+      error_similar_area (float): Acceptable area error for similar captcha cells.
+      detect_confidence (float): Confidence level when solving a captcha.
+      mask_cell_overlap_px (int): Number of mask pixels overlapped by the cell.
+
+   Returns:
+      (bool): True, if the captcha was successfully solved
+   """
+```
 
 ## Ограничения
-
+ ReCaptcher протестирован на пяти сайтах с капчей, тем не менее могут возникнуть непредвиденные ошибки.
 #### Результаты могут зависеть от:
 * Количества запросов, отправленных с вашего IP-адреса;
 * Качества интернет соединения;
 * Настройки WebDriver (например, низкого time_wait при поиске элементов);
 * Настройки time_sleep между этапами взаимодействия с веб-страницей;
+* Веб-страницы, на которой находится капча - у элементов могут быть другие пути, названия и проч.
 * Изменений, внесенных разработчиками в html-код сайтов с искомыми элементами (потребуется новая настройка путей к
   элементам в settings);
-* Языка капчи (доступно решение только русских капч).
