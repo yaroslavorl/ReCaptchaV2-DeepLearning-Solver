@@ -1,24 +1,32 @@
 # ReCaptcher ⚡⚡⚡
 
-ReCaptcher - Automatic Google reCAPTCHAv2 Solver using YOLO Model Segmentation
+ReCaptcher - Automatic Google reCAPTCHAv2 Solver using YOLO Model Segmentation.
 
-![Описание изображения](assets/cap_seg.jpg)
+The most accurate visual Google captcha solver at the moment, using not detection of objects in the captcha, but segmentation. 
+Which makes the solution of captchas several times more accurate and faster.
 
-## Описание
+Please use for educational purposes only :)
+* Solve Google reCAPTCHAv2 in Russian 🇷🇺 and English 🇺🇸;
+* Solve dynamic (where new images appear after selection) and one-time reCAPTCHA;
+* Customize the wait time between each stage of solving the captcha. From mega fast solutions to super slow ones;
+* Use any modern YOLO segmentation models.
 
-ReCaptcher использует Selenium для автоматизированного взаимодействия с веб-страницей,
-на которой размещена reCAPTCHA и сегментационную модель YOLO, 
-которая позволяет эффективно распознавать и обрабатывать элементы этой капчи. 
+![Demo segmentation img](assets/cap_seg.jpg)
 
-YOLO выполняет сегментацию и возвращает маски объектов,
-затем осуществляется анализ полученных масок для нахождения пересечений между ними и ячейками капчи.
-На основании полученных данных о пересечении, система принимает решение о том, какие ячейки с объектами необходимо выбрать. 
+## Project Description
 
-Пример автоматического решения Google reCAPTCHA представлен ниже.
+ReCaptcher uses Selenium to automatically interact with the web page that hosts reCAPTCHA and the **YOLO segmentation model**,
+which allows it to efficiently recognize and process elements of this captcha.
+
+YOLO performs segmentation and returns object masks,
+then the received masks are analyzed to find intersections between them and the captcha cells.
+Based on the received intersection data, the system decides which cells with objects should be selected.
+
+An example of an automatic Google reCAPTCHA solution is presented below.
 
 <img src="assets/demo_solver.gif" alt="Пример решения капч" width="600" />
 
-## Установка зависимостей
+## Installing requirements
 
    ```bash
   git clone https://github.com/yaroslavorl/ReCaptcher.git
@@ -31,11 +39,11 @@ YOLO выполняет сегментацию и возвращает маск�
   pip install -r requirements.txt
 ```
 
-## Установка Chromedriver
+## Installing Chromedriver
 
-Для работы с Selenium вам необходимо установить Chromedriver вашей версии Google Chrome
+To work with Selenium you need to install Chromedriver of your Google Chrome version
 
-#### Полезные ссылки:
+#### Useful links:
 
 1. [Установка браузер Chrome и Chromedriver Ubuntu 20.04](https://skolo.online/documents/webscrapping/#step-2-install-chromedriver)
 2. [Chromedriver GitHub](https://github.com/dreamshao/chromedriver)
@@ -61,7 +69,7 @@ def main():
   solver = CaptchaSolver(google_driver, detector_weight='yolo_weights/yolov9e-seg.pt')
 
   time.sleep(2)
-  # Данных строк достаточно для автоматического решения гугл-капч.
+  # These lines are enough to automatically solve Google captcha.
   if solver.is_captcha():
     solver.solve_captcha()
 
@@ -73,23 +81,21 @@ if __name__ == '__main__':
 ```
 
 ### Recaptcher Settings:
-`TIME_SLEEP` — это класс, который управляет временными задержками в процессе взаимодействия
-с элементами на веб-странице с капчей. Ниже приведены параметры, которые вы можете настроить для работы решателя капч:
-
+`TIME_SLEEP` — is a class that manages the time delays when interacting with elements on a web page with a captcha. Below are the parameters that you can configure for the captcha solver to work:
 ```python
 from solver import CaptchaSolver
 from config.settings import TimeSleep
 
-# Настройка времени ожидания после любого этапа решения капчи
-TIME_SLEEP = TimeSleep(CLICK_IM_NOT_ROBOT=2, # Время (в секундах) ожидания перед нажатием на кнопку "Я не робот".
-                       CLICK_RATE=0.1, # Задержка между кликами по ячейкам.
-                       CLICK_ON_CELL_DONE=1, # Время ожидания после успешного завершения челленджа.
-                       SKIP_CAPTCHA=2, # Время ожидания после пропуска капчи.
-                       CAPTCHA_COMPLETED=1, # Время ожидания после успешного завершения капчи.
-                       ADDITIONAL_CHALLENGE=10 # Время ожидания появление новых объектов на динамической капче.
+# Setting the wait time after any stage of solving the captcha
+TIME_SLEEP = TimeSleep(CLICK_IM_NOT_ROBOT=2, # Time (in seconds) to wait before clicking the "I'm not a robot" button.
+                       CLICK_RATE=0.1, # Delay between cell clicks.
+                       CLICK_ON_CELL_DONE=1, # Waiting time after successful completion of the challenge.
+                       SKIP_CAPTCHA=2, # Wait time after skipping captcha.
+                       CAPTCHA_COMPLETED=1, # Wait time after successfully completing a captcha.
+                       ADDITIONAL_CHALLENGE=10 # Waiting time for new objects to appear on a dynamic captcha.
                        )
 
-# Выбор весов YOLO-seg (YOLOv8-seg/YOLOv9-seg/YOLOv11-seg)
+# Selection of YOLO-seg scales (YOLOv8-seg/YOLOv9-seg/YOLOv11-seg)
 DETECTOR_WEIGHT = 'yolov9e-seg.pt'
 
 solver = CaptchaSolver(driver=google_driver,
@@ -133,13 +139,13 @@ def solve_captcha(
    """
 ```
 
-## Ограничения
- ReCaptcher протестирован на пяти сайтах с капчей, тем не менее могут возникнуть непредвиденные ошибки.
-#### Результаты могут зависеть от:
-* Количества запросов, отправленных с вашего IP-адреса;
-* Качества интернет соединения;
-* Настройки WebDriver (например, низкого time_wait при поиске элементов);
-* Настройки time_sleep между этапами взаимодействия с веб-страницей;
-* Веб-страницы, на которой находится капча - у элементов могут быть другие пути, названия и проч.
-* Изменений, внесенных разработчиками в html-код сайтов с искомыми элементами (потребуется новая настройка путей к
-  элементам в settings);
+## Limitations
+ ReCaptcher has been tested on five captcha sites, however unexpected errors may still occur.
+#### Results may vary depending on:
+* The number of requests sent from your IP address;
+* Internet connection quality;
+* WebDriver settings (eg low time_wait when searching for elements);
+* Setting time_sleep between stages of interaction with a web page;
+* The web page where the captcha is located - elements may have different paths, names, etc.
+* Changes made by developers to the html code of sites with the searched elements (a new setting of paths to elements in settings will be required);
+* Captcha language, because the project was originally created for solving Russian captchas. However, you have the opportunity to solve captchas in English, but errors are possible.

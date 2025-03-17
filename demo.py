@@ -13,6 +13,7 @@ def main():
     # captcha_page = "https://www.google.com/recaptcha/api2/demo"
     # captcha_page = 'https://democaptcha.com/demo-form-eng/recaptcha-2.html'
     # captcha_page = 'https://terrillthompson.com/tests/recaptcha/'
+    # captcha_page = 'https://recaptcha-demo.appspot.com/recaptcha-v2-checkbox.php'
 
     driver_path = os.getenv('DRIVER')
     google_driver = get_driver(driver_path)

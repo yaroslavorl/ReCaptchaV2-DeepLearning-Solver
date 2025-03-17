@@ -11,7 +11,8 @@ class CaptchaElements:
     IMG_SELECTOR = 'rc-imageselect'
     STRONG_TXT_STYLE = 'strong'
     SPAN_TXT_STYLE = 'span'
-    ADDITIONAL_CHALLENGE = 'Когда изображения закончатся, нажмите "Подтвердить"'
+    ADDITIONAL_CHALLENGE_RU = 'Когда изображения закончатся, нажмите "Подтвердить"'
+    ADDITIONAL_CHALLENGE_ENG = 'Click verify once there are none left'
     SKIP_BUTTON = 'recaptcha-reload-button'
     VERIFY_BUTTON = 'recaptcha-verify-button'
 

@@ -205,8 +205,9 @@ class CaptchaSolver:
         return captcha_bytes, captcha_type, is_additional_challenge, class_idx
 
     def _check_additional_challenge(self, text: str) -> bool:
-        return (self._captcha_elements.ADDITIONAL_CHALLENGE == text or
-                f'{self._captcha_elements.ADDITIONAL_CHALLENGE}.' == text)
+        return (text == self._captcha_elements.ADDITIONAL_CHALLENGE_RU or
+                text == f'{self._captcha_elements.ADDITIONAL_CHALLENGE_RU}.' or
+                text == self._captcha_elements.ADDITIONAL_CHALLENGE_ENG)
 
     def _find_class_idx(self, required_class_name: str) -> int | None:
         for english_word, synonym_list in CAPTCHA_CLASS_NAME.items():
