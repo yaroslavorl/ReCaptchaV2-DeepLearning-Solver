@@ -1,6 +1,6 @@
-# ReCaptcher ⚡⚡⚡
+# ReCaptchaV2-DL-Solver ⚡⚡⚡
 
-ReCaptcher - Automatic Google reCAPTCHAv2 Solver using YOLO Model Segmentation.
+Automatic Google reCAPTCHAv2 Solver using YOLO Model Segmentation.
 
 The most accurate visual Google captcha solver at the moment, using not detection of objects in the captcha, but segmentation. 
 Which makes the solution of captchas several times more accurate and faster.
@@ -15,7 +15,7 @@ Please use for educational purposes only :)
 
 ## Project Description
 
-ReCaptcher uses Selenium to automatically interact with the web page that hosts reCAPTCHA and the **YOLO segmentation model**,
+ReCaptchaV2-DL-Solver uses Selenium to automatically interact with the web page that hosts reCAPTCHA and the **YOLO segmentation model**,
 which allows it to efficiently recognize and process elements of this captcha.
 
 YOLO performs segmentation and returns object masks,
@@ -29,8 +29,8 @@ An example of an automatic Google reCAPTCHA solution is presented below.
 ## Installing requirements
 
    ```bash
-  git clone https://github.com/yaroslavorl/ReCaptcher.git
-  cd ReCaptcher
+  git clone https://github.com/yaroslavorl/ReCaptchaV2-DeepLearning-Solver.git
+  cd ReCaptchaV2-DeepLearning-Solver
   
   # Python >= 3.10
   python -m venv venv
@@ -80,7 +80,7 @@ if __name__ == '__main__':
   main()
 ```
 
-### Recaptcher Settings:
+### ReCaptchaV2-DL-Solver Settings:
 `TIME_SLEEP` — is a class that manages the time delays when interacting with elements on a web page with a captcha. Below are the parameters that you can configure for the captcha solver to work:
 ```python
 from solver import CaptchaSolver
@@ -140,7 +140,7 @@ def solve_captcha(
 ```
 
 ## Limitations
- ReCaptcher has been tested on five captcha sites, however unexpected errors may still occur.
+ ReCaptchaV2-DL-Solver has been tested on five captcha sites, however unexpected errors may still occur.
 #### Results may vary depending on:
 * The number of requests sent from your IP address;
 * Internet connection quality;
