@@ -100,6 +100,7 @@ class CaptchaDetector:
                 if area_contour in len_group_area and area_contour > area_thresh:
                     required_contours.append(cv2.boundingRect(contour))
             return required_contours
+        return None
 
     @staticmethod
     def _get_intersecting_boxes(boxes, masks, captcha_size: tuple[int, ...], thresh: int):
@@ -136,7 +137,7 @@ class CaptchaDetector:
         return bbx_center_coord
 
     @staticmethod
-    def _decoding_bytes_to_img(img_bytes: bytes) -> np.array:
+    def _decoding_bytes_to_img(img_bytes: bytes) -> np.ndarray:
         array_data = np.frombuffer(img_bytes, dtype=np.uint8)
         img = cv2.imdecode(array_data, cv2.IMREAD_COLOR)
         return img
@@ -145,7 +146,7 @@ class CaptchaDetector:
     def convert_local_to_global_coord_img(
             img_full_page: np.ndarray,
             img_captcha: np.ndarray,
-            local_coord_cell_center: list[tuple[float, float], ...]
+            local_coord_cell_center: list[tuple[float, float]]
     ):
         result = cv2.matchTemplate(img_full_page, img_captcha, cv2.TM_CCOEFF_NORMED)
         _, _, _, max_loc = cv2.minMaxLoc(result)

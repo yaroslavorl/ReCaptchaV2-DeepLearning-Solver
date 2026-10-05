@@ -2,7 +2,7 @@ import time
 
 from selenium.common import NoSuchElementException
 from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.common.by import By
+from selenium.webdriver.common.by import By, ByType
 
 from config import CLICK_SCRIPT, TimeSleep, CaptchaElements
 
@@ -36,7 +36,7 @@ class CaptchaManager:
         except NoSuchElementException:
             return False
 
-    def switch_to_iframe(self, by: By, value: str, get_captcha_screen: bool = False):
+    def switch_to_iframe(self, by: ByType, value: str, get_captcha_screen: bool = False):
         self.__driver.switch_to.default_content()
         iframe = self.__driver.find_elements(by, value)
         if get_captcha_screen:
@@ -45,7 +45,7 @@ class CaptchaManager:
             return captcha_screen
         self.__driver.switch_to.frame(iframe[self._captcha_element_idx])
 
-    def click_on_cell(self, coord: list[tuple[float, float]]):
+    def click_on_cell(self, coord: list[tuple[float, float]] | None):
         if not coord:
             return
 

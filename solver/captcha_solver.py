@@ -144,7 +144,7 @@ class CaptchaSolver:
             self._captcha_manager.click_on_cell(coord_click)
             time.sleep(self._times_sleep.ADDITIONAL_CHALLENGE)
 
-            captcha_bytes = self._get_all_challenge_attributes(get_only_captcha_bytes=True)
+            captcha_bytes = self._get_captcha_bytes()
 
     def _get_correct_challenge_attributes(self) -> tuple[bytes, str, bool, int]:
         """
@@ -152,43 +152,23 @@ class CaptchaSolver:
         And returns the attributes of such a captcha.
         """
         while True:
-            captcha_bytes, captcha_type, is_additional_challenge, class_idx = self._get_all_challenge_attributes()
+            captcha_bytes, captcha_type, is_additional_challenge, class_idx = self._get_challenge_attributes()
             if class_idx is not None:
                 break
             self._captcha_manager.skip_captcha()
         return captcha_bytes, captcha_type, is_additional_challenge, class_idx
 
-    def _get_all_challenge_attributes(self,
-                                      get_only_captcha_bytes: bool = False
-                                      ) -> bytes | tuple[bytes, str, bool, int]:
+    def _get_captcha_bytes(self) -> bytes:
+        return self._captcha_manager.switch_to_iframe(by=By.TAG_NAME,
+                                                      value=self._captcha_elements.IFRAME,
+                                                      get_captcha_screen=True)
 
-        """
-         Retrieves all attributes of the current captcha.
+    def _get_challenge_attributes(self) -> tuple[bytes, str, bool, int | None]:
+        """Return the captcha image, tile type, challenge flag, and detected class index."""
+        captcha_bytes = self._get_captcha_bytes()
 
-         This method does the following:
-            1. Switches to the iframe containing the captcha.
-            2. Extracts the captcha image bytes.
-            3. Optionally returns only the captcha image bytes.
-            4. Gets the captcha type from the class attribute of the corresponding element.
-            5. Finds the image elements to select and determines the class index for the current captcha challenge.
-            6. Checks for the presence of an additional captcha challenge and sets the corresponding flag.
-
-         Args:
-            get_only_captcha_bytes (bool): If `True`, the method will return only the captcha image bytes.
-            Default is `False`.
-
-         Returns:
-            (tuple): A tuple containing the captcha image bytes, captcha type, extra challenge flag, and class index.
-         """
-
-        captcha_bytes = self._captcha_manager.switch_to_iframe(by=By.TAG_NAME,
-                                                               value=self._captcha_elements.IFRAME,
-                                                               get_captcha_screen=True)
-        if get_only_captcha_bytes:
-            return captcha_bytes
-
-        captcha_type = self.__driver.find_element(By.XPATH,
-                                                  self._captcha_elements.CAPTCHA_TYPE_XPATH).get_attribute('class')
+        captcha_type_element = self.__driver.find_element(By.XPATH, self._captcha_elements.CAPTCHA_TYPE_XPATH)
+        captcha_type = captcha_type_element.get_attribute('class') or ''
 
         img_selector = self.__driver.find_elements(By.XPATH, self._captcha_elements.IMG_SELECT_XPATH)
         search_element = img_selector[self._captcha_element_idx]
